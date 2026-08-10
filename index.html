@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İC Yat Training — Formation & Coaching en Électrotechnique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F8FA;
+    --ink:#12161C;
+    --accent:#FFC53D;
+    --steel:#3A5470;
+    --muted:#6B7480;
+    --line:#E1E4E9;
+    --white:#FFFFFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Space Grotesk',sans-serif;
+    letter-spacing:-0.01em;
+  }
+  .mono{
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.02em;
+  }
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  section{position:relative;}
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(247,248,250,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease, background .3s ease;
+  }
+  header.scrolled{border-bottom-color:var(--line);}
+  .nav-inner{
+    max-width:1180px;margin:0 auto;padding:18px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;font-size:17px;letter-spacing:0.01em;
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;}
+  nav.links{display:flex;gap:36px;}
+  nav.links a{
+    font-size:14px;color:var(--muted);font-weight:500;
+    position:relative;padding-bottom:4px;
+    transition:color .2s ease;
+  }
+  nav.links a:hover{color:var(--ink);}
+  nav.links a::after{
+    content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--accent);
+    transition:width .25s ease;
+  }
+  nav.links a:hover::after{width:100%;}
+  .cta-btn{
+    font-family:'Inter',sans-serif;font-weight:600;font-size:14px;
+    background:var(--ink);color:var(--white);
+    padding:11px 20px;border-radius:2px;
+    border:1px solid var(--ink);
+    cursor:pointer;transition:background .2s ease, color .2s ease, transform .15s ease;
+  }
+  .cta-btn:hover{background:var(--accent);border-color:var(--accent);color:var(--ink);}
+  .cta-btn:active{transform:scale(0.97);}
+  .cta-ghost{
+    font-weight:600;font-size:14px;
+    background:transparent;color:var(--ink);
+    padding:11px 20px;border-radius:2px;border:1px solid var(--line);
+    cursor:pointer;transition:border-color .2s ease, background .2s ease;
+  }
+  .cta-ghost:hover{border-color:var(--ink);}
+  .menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px;}
+  .menu-toggle span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;}
+
+  /* ---------- Circuit spine (signature element) ---------- */
+  .spine{
+    position:fixed;left:44px;top:0;bottom:0;width:2px;
+    z-index:5;pointer-events:none;
+    display:block;
+  }
+  .spine svg{position:absolute;top:0;left:-1px;height:100%;width:20px;overflow:visible;}
+  .spine-line{
+    stroke:var(--line);stroke-width:2;fill:none;
+  }
+  .spine-progress{
+    stroke:var(--accent);stroke-width:2;fill:none;
+    stroke-dasharray:1;stroke-dashoffset:1;
+    transition:stroke-dashoffset .1s linear;
+  }
+  .spine-node{
+    position:absolute;left:-4px;width:10px;height:10px;border-radius:50%;
+    background:var(--bg);border:2px solid var(--line);
+    transition:border-color .35s ease, background .35s ease, box-shadow .35s ease;
+  }
+  .spine-node.lit{border-color:var(--accent);background:var(--accent);box-shadow:0 0 0 4px rgba(255,197,61,0.18);}
+  .spine-label{
+    position:absolute;left:16px;top:-6px;font-size:10px;color:var(--muted);
+    white-space:nowrap;opacity:0;transform:translateX(-4px);
+    transition:opacity .3s ease, transform .3s ease;
+  }
+  .spine-node.lit + .spine-label{opacity:1;transform:translateX(0);}
+  @media (max-width:1050px){.spine{display:none;}}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:168px 0 110px;
+    min-height:92vh;display:flex;align-items:center;
+  }
+  .hero-inner{
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;
+    color:var(--steel);text-transform:uppercase;letter-spacing:0.08em;
+    margin-bottom:24px;
+  }
+  .eyebrow::before{content:'';width:16px;height:1px;background:var(--accent);}
+  .hero h1{
+    font-size:clamp(38px,5vw,60px);
+    font-weight:600;line-height:1.06;
+    margin-bottom:26px;
+  }
+  .hero h1 .hl{color:var(--steel);}
+  .hero p.sub{
+    font-size:17px;line-height:1.65;color:var(--muted);
+    max-width:460px;margin-bottom:36px;
+  }
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px;}
+  .hero-stats{
+    display:flex;gap:40px;padding-top:28px;border-top:1px solid var(--line);
+    max-width:460px;
+  }
+  .stat-num{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;}
+  .stat-label{font-size:12px;color:var(--muted);margin-top:4px;}
+
+  .hero-visual{position:relative;aspect-ratio:1/1;}
+  .hero-visual svg{width:100%;height:100%;}
+
+  /* ---------- Section headers ---------- */
+  .sec-head{max-width:640px;margin-bottom:56px;}
+  .sec-tag{
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--steel);
+    text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;display:block;
+  }
+  .sec-head h2{font-size:clamp(28px,3.4vw,40px);font-weight:600;line-height:1.15;}
+  .sec-head p{color:var(--muted);font-size:16px;margin-top:16px;line-height:1.6;}
+
+  section.pad{padding:120px 0;}
+  section.pad + section.pad{border-top:1px solid var(--line);}
+
+  /* ---------- About ---------- */
+  .about-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:64px;align-items:start;}
+  .about-visual{
+    width:100%;aspect-ratio:4/5;border:1px solid var(--line);border-radius:2px;
+    position:relative;overflow:hidden;
+    background:linear-gradient(160deg,#fff,#eef0f3);
+  }
+  .about-visual svg{width:100%;height:100%;display:block;}
+  .about-visual::after{
+    content:'';position:absolute;inset:14px;border:1px solid rgba(18,22,28,0.06);pointer-events:none;
+  }
+  .visual-tag{
+    position:absolute;bottom:0;left:0;right:0;
+    background:rgba(18,22,28,0.82);backdrop-filter:blur(4px);
+    color:var(--white);padding:14px 16px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.03em;
+    display:flex;justify-content:space-between;
+  }
+  .visual-tag span:first-child{color:var(--accent);}
+  .chart-node{transform-box:fill-box;transform-origin:center;animation:nodePulse 2.6s ease-in-out infinite;}
+  .chart-node:nth-of-type(1){animation-delay:0s;}
+  .chart-node:nth-of-type(2){animation-delay:.3s;}
+  .chart-node:nth-of-type(3){animation-delay:.6s;}
+  .chart-node:nth-of-type(4){animation-delay:.9s;}
+  .chart-node:nth-of-type(5){animation-delay:1.2s;}
+  .chart-node:nth-of-type(6){animation-delay:1.5s;}
+  @keyframes nodePulse{
+    0%,100%{opacity:0.55;transform:scale(1);}
+    50%{opacity:1;transform:scale(1.6);}
+  }
+  .chart-line{
+    stroke-dasharray:520;stroke-dashoffset:520;
+    animation:drawLine 2.2s ease forwards;
+  }
+  .chart-area{opacity:0;animation:fadeArea 1.6s ease 1s forwards;}
+  @keyframes drawLine{to{stroke-dashoffset:0;}}
+  @keyframes fadeArea{to{opacity:1;}}
+  .chart-glow{animation:glowPulse 2.6s ease-in-out infinite;}
+  @keyframes glowPulse{
+    0%,100%{r:6;opacity:1;}
+    50%{r:10;opacity:0.5;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .chart-node,.chart-line,.chart-area,.chart-glow{animation:none !important;stroke-dashoffset:0 !important;opacity:1 !important;}
+  }
+  .about-body p{color:var(--muted);font-size:16px;line-height:1.75;margin-bottom:18px;}
+  .about-body p strong{color:var(--ink);font-weight:600;}
+  .spec-list{margin-top:32px;border-top:1px solid var(--line);}
+  .spec-row{
+    display:flex;justify-content:space-between;padding:14px 0;
+    border-bottom:1px solid var(--line);font-size:14px;
+  }
+  .spec-row .k{font-family:'JetBrains Mono',monospace;color:var(--muted);}
+  .spec-row .v{font-weight:500;text-align:right;}
+
+  /* ---------- Courses ---------- */
+  .course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .course-card{
+    background:var(--bg);padding:34px 30px;
+    transition:background .25s ease;
+    display:flex;flex-direction:column;min-height:280px;
+  }
+  .course-card:hover{background:var(--white);}
+  .course-code{
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);
+    background:rgba(255,197,61,0.12);display:inline-block;padding:3px 8px;
+    border-radius:2px;margin-bottom:20px;width:fit-content;
+  }
+  .course-card h3{font-size:19px;font-weight:600;margin-bottom:10px;line-height:1.3;}
+  .course-card p{font-size:14px;color:var(--muted);line-height:1.6;flex-grow:1;}
+  .course-meta{
+    display:flex;gap:16px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line);
+    font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;
+  }
+
+  /* ---------- Coaching ---------- */
+  .coach-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:64px;}
+  .coach-text p{color:var(--muted);font-size:16px;line-height:1.75;margin-bottom:20px;}
+  .coach-steps{border-top:1px solid var(--line);}
+  .coach-step{
+    display:flex;gap:24px;padding:26px 0;border-bottom:1px solid var(--line);
+  }
+  .coach-step .num{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:var(--accent);
+    min-width:36px;
+  }
+  .coach-step h4{font-size:16px;font-weight:600;margin-bottom:6px;}
+  .coach-step p{font-size:14px;color:var(--muted);line-height:1.6;}
+
+  /* ---------- Contact (dark) ---------- */
+  .contact-sec{
+    background:var(--ink);color:var(--white);
+  }
+  .contact-sec .sec-tag{color:var(--accent);}
+  .contact-sec .sec-head p{color:#9AA3B0;}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;}
+  .field{margin-bottom:20px;}
+  .field label{
+    display:block;font-family:'JetBrains Mono',monospace;font-size:11px;
+    text-transform:uppercase;letter-spacing:0.06em;color:#9AA3B0;margin-bottom:8px;
+  }
+  .field input,.field textarea{
+    width:100%;background:transparent;border:none;border-bottom:1px solid #2C333E;
+    color:var(--white);font-family:'Inter',sans-serif;font-size:15px;padding:10px 2px;
+    transition:border-color .2s ease;
+  }
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);}
+  .field textarea{resize:vertical;min-height:90px;}
+  .contact-info{display:flex;flex-direction:column;gap:28px;}
+  .info-item .k{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;color:#9AA3B0;letter-spacing:0.06em;margin-bottom:6px;}
+  .info-item .v{font-size:17px;font-weight:500;}
+  .submit-btn{
+    background:var(--accent);color:var(--ink);font-weight:600;font-size:14px;
+    padding:13px 26px;border:none;border-radius:2px;cursor:pointer;margin-top:8px;
+    transition:transform .15s ease, opacity .2s ease;
+  }
+  .submit-btn:hover{opacity:0.9;}
+  .submit-btn:active{transform:scale(0.97);}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--ink);color:#7A8290;padding:32px 0;border-top:1px solid #22282f;}
+  .footer-inner{display:flex;justify-content:space-between;align-items:center;font-size:13px;flex-wrap:wrap;gap:12px;}
+  .footer-inner .logo{color:var(--white);}
+
+  /* ---------- Reveal animation ---------- */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:900px){
+    .hero-inner{grid-template-columns:1fr;}
+    .hero-visual{max-width:340px;margin:0 auto;order:-1;}
+    .about-grid,.coach-grid,.contact-grid{grid-template-columns:1fr;}
+    .course-grid{grid-template-columns:1fr;}
+    nav.links{display:none;}
+    .menu-toggle{display:block;}
+    .cta-btn.desktop-only{display:none;}
+  }
+  @media (max-width:520px){
+    .wrap{padding:0 20px;}
+    .hero{padding-top:140px;}
+    .hero-stats{flex-wrap:wrap;gap:24px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- Circuit spine signature element -->
+<div class="spine" id="spine">
+  <svg viewBox="0 0 20 100" preserveAspectRatio="none">
+    <line class="spine-line" x1="0" y1="0" x2="0" y2="100" vector-effect="non-scaling-stroke"/>
+    <line class="spine-progress" id="spineProgress" x1="0" y1="0" x2="0" y2="100" vector-effect="non-scaling-stroke"/>
+  </svg>
+  <div id="spineNodes"></div>
+</div>
+
+<header id="siteHeader">
+  <div class="nav-inner">
+    <a href="#top" class="logo"><span class="dot"></span>İC YAT TRAINING</a>
+    <nav class="links">
+      <a href="#formations">Formations</a>
+      <a href="#coaching">Coaching</a>
+      <a href="#apropos">À propos</a>
+      <a href="#parcours">Parcours</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="cta-btn desktop-only" onclick="document.getElementById('contact').scrollIntoView()">Réserver un appel</button>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <span class="eyebrow">Formation &amp; coaching en énergies renouvelables et réseaux électriques</span>
+        <h1>Maîtrisez l'énergie.<br>Construisez votre <span class="hl">carrière.</span></h1>
+        <p class="sub">İC Yat Training forme ingénieurs, techniciens et futurs professionnels de l'énergie — avec l'expertise du Dr Ibrahim Chicoda Yattara, consultant international et formateur senior en énergies renouvelables, réseaux électriques et audit énergétique.</p>
+        <div class="hero-ctas">
+          <a href="https://whop.com/ic-yatt-traning" target="_blank" rel="noopener" class="cta-btn" style="display:inline-block;">Voir les informations</a>
+          <button class="cta-ghost" onclick="document.getElementById('coaching').scrollIntoView()">Découvrir le coaching</button>
+        </div>
+        <div class="hero-stats">
+          <div><div class="stat-num">25+</div><div class="stat-label">Ans chez EDM-SA</div></div>
+          <div><div class="stat-num">7</div><div class="stat-label">Modules enseignés à l'ENETP</div></div>
+          <div><div class="stat-num">2026</div><div class="stat-label">Doctorat en énergies renouvelables</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="200" cy="200" r="150" stroke="#E1E4E9" stroke-width="1"/>
+          <g id="circuitPaths" stroke="#3A5470" stroke-width="1.4" fill="none" stroke-linecap="round">
+            <path d="M60 200 H140" />
+            <path d="M140 200 V120 H220" />
+            <path d="M140 200 V280 H220" />
+            <path d="M220 120 V80 H320" />
+            <path d="M220 280 V320 H320" />
+            <path d="M220 120 H300 V200" />
+            <path d="M220 280 H300 V200" />
+            <path d="M300 200 H340" />
+          </g>
+          <g id="circuitNodes" fill="#12161C">
+            <circle cx="60" cy="200" r="5"/>
+            <circle cx="140" cy="200" r="4"/>
+            <circle cx="220" cy="120" r="4"/>
+            <circle cx="220" cy="280" r="4"/>
+            <circle cx="300" cy="200" r="5"/>
+            <circle cx="320" cy="80" r="6" fill="#FFC53D"/>
+            <circle cx="320" cy="320" r="6" fill="#FFC53D"/>
+            <circle cx="340" cy="200" r="6" fill="#FFC53D"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="pad" id="apropos">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="reveal">
+          <div class="about-visual">
+            <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+              <!-- grid -->
+              <g stroke="#E1E4E9" stroke-width="1">
+                <line x1="40" y1="90" x2="360" y2="90"/>
+                <line x1="40" y1="170" x2="360" y2="170"/>
+                <line x1="40" y1="250" x2="360" y2="250"/>
+                <line x1="40" y1="330" x2="360" y2="330"/>
+                <line x1="40" y1="410" x2="360" y2="410"/>
+                <line x1="40" y1="90" x2="40" y2="410"/>
+              </g>
+              <!-- area under curve -->
+              <polygon class="chart-area" points="40,390 100,350 160,320 220,270 280,210 340,120 340,410 40,410" fill="#FFC53D" opacity="0.12"/>
+              <!-- main energy curve -->
+              <polyline class="chart-line" points="40,390 100,350 160,320 220,270 280,210 340,120" fill="none" stroke="#3A5470" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+              <!-- data nodes -->
+              <circle class="chart-node" cx="40" cy="390" r="4" fill="#12161C"/>
+              <circle class="chart-node" cx="100" cy="350" r="4" fill="#12161C"/>
+              <circle class="chart-node" cx="160" cy="320" r="4" fill="#12161C"/>
+              <circle class="chart-node" cx="220" cy="270" r="4" fill="#12161C"/>
+              <circle class="chart-node" cx="280" cy="210" r="4" fill="#12161C"/>
+              <!-- live endpoint -->
+              <circle cx="340" cy="120" r="6" fill="#FFC53D"/>
+              <circle class="chart-glow" cx="340" cy="120" r="6" fill="none" stroke="#FFC53D" stroke-width="2"/>
+              <!-- axis labels -->
+              <g font-family="JetBrains Mono, monospace" font-size="10" fill="#6B7480">
+                <text x="40" y="432">2020</text>
+                <text x="150" y="432">2022</text>
+                <text x="260" y="432">2024</text>
+                <text x="330" y="432">2026</text>
+                <text x="40" y="70">kWh</text>
+              </g>
+            </svg>
+            <div class="visual-tag"><span>PRODUCTION ÉNERGÉTIQUE</span><span>DONNÉES EN TEMPS RÉEL</span></div>
+          </div>
+        </div>
+        <div class="reveal">
+          <span class="sec-tag">À propos du formateur</span>
+          <h2 style="font-size:clamp(26px,3vw,34px);font-weight:600;margin-bottom:22px;">Docteur Ibrahim Chicoda Yattara</h2>
+          <div class="about-body">
+            <p><strong>Consultant international et formateur senior</strong>, expert en énergies renouvelables, réseaux électriques et audit énergétique, le Dr Yattara construit son parcours depuis 1999 entre le terrain, l'enseignement et la recherche appliquée à Bamako, au Mali.</p>
+            <p>Il dirige actuellement les audits techniques d'Énergie du Mali (EDM-SA) après avoir occupé plusieurs postes de responsabilité — chef de département, inspecteur senior, chef de service — dans le contrôle, la facturation moyenne tension et le suivi des infrastructures d'énergies renouvelables. Depuis 2012, il enseigne à l'ENETP les modules de biomasse, microcentrales hydroélectriques, photovoltaïque, éolien, hydrolien, stabilité de réseaux et combustion.</p>
+            <p>Titulaire d'un doctorat en énergies renouvelables (École Doctorale des Sciences et Techniques du Mali, 2026) et auteur de plusieurs publications scientifiques, il met cette double expertise — académique et industrielle — au service de ses formations et de son coaching individuel.</p>
+          </div>
+          <div class="spec-list">
+            <div class="spec-row"><span class="k">DOMAINE</span><span class="v">Énergies renouvelables, réseaux électriques, audit énergétique</span></div>
+            <div class="spec-row"><span class="k">EXPÉRIENCE</span><span class="v">25+ ans, EDM-SA &amp; enseignement (ENETP depuis 2012)</span></div>
+            <div class="spec-row"><span class="k">FORMATION</span><span class="v">Doctorat en énergies renouvelables (EDSTM/USTTB, 2026)</span></div>
+            <div class="spec-row"><span class="k">DIPLÔME D'INGÉNIEUR</span><span class="v">Génie industriel, option Électricité — ENI-ABT, Mali</span></div>
+            <div class="spec-row"><span class="k">OUTILS</span><span class="v">PVsyst, HOMER, RETScreen, AutoCAD</span></div>
+            <div class="spec-row"><span class="k">LANGUES</span><span class="v">Français (langue maternelle), Anglais (courant)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMATIONS -->
+  <section class="pad" id="formations">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-tag">Formations</span>
+        <h2>Les modules enseignés par le Dr Yattara</h2>
+        <p>Depuis 2012, ces modules sont dispensés à l'ENETP. İC Yat Training les propose désormais en formation professionnelle, en présentiel ou à distance.</p>
+      </div>
+      <div class="course-grid reveal">
+        <div class="course-card">
+          <span class="course-code">EN-101</span>
+          <h3>Technologies et systèmes photovoltaïques</h3>
+          <p>Conception, dimensionnement et installation de systèmes solaires photovoltaïques, autonomes ou raccordés au réseau.</p>
+          <div class="course-meta"><span>Renouvelable</span><span>PVsyst</span></div>
+        </div>
+        <div class="course-card">
+          <span class="course-code">EN-110</span>
+          <h3>Microcentrales hydroélectriques</h3>
+          <p>Étude, dimensionnement et exploitation de petites installations de production hydroélectrique.</p>
+          <div class="course-meta"><span>Renouvelable</span><span>Hydraulique</span></div>
+        </div>
+        <div class="course-card">
+          <span class="course-code">EN-120</span>
+          <h3>Éolien &amp; hydrolien</h3>
+          <p>Principes, technologies et dimensionnement des systèmes de production éolienne et hydrolienne.</p>
+          <div class="course-meta"><span>Renouvelable</span><span>Éolien</span></div>
+        </div>
+        <div class="course-card">
+          <span class="course-code">EN-130</span>
+          <h3>Biomasse énergie &amp; combustion</h3>
+          <p>Valorisation énergétique de la biomasse et principes de combustion appliqués à la production d'énergie.</p>
+          <div class="course-meta"><span>Renouvelable</span><span>Biomasse</span></div>
+        </div>
+        <div class="course-card">
+          <span class="course-code">RS-201</span>
+          <h3>Stabilité des réseaux électriques</h3>
+          <p>Analyse et gestion de la stabilité des réseaux, avec forte intégration des énergies renouvelables.</p>
+          <div class="course-meta"><span>Réseaux</span><span>Avancé</span></div>
+        </div>
+        <div class="course-card">
+          <span class="course-code">RS-210</span>
+          <h3>Audit &amp; efficacité énergétique</h3>
+          <p>Méthodes d'audit énergétique, optimisation de la consommation et conformité ISO 50001.</p>
+          <div class="course-meta"><span>Audit</span><span>ISO 50001</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREDIBILITÉ / PARCOURS -->
+  <section class="pad" id="parcours">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-tag">Parcours &amp; reconnaissance</span>
+        <h2>25 ans entre terrain, enseignement et recherche</h2>
+        <p>Un parcours construit chez Énergie du Mali (EDM-SA), consolidé par des certifications internationales et une activité de recherche publiée.</p>
+      </div>
+      <div class="course-grid reveal" style="grid-template-columns:repeat(3,1fr);">
+        <div class="course-card">
+          <span class="course-code">01</span>
+          <h3>Carrière chez EDM-SA</h3>
+          <p>De coordinateur multifonction à Kidal (1999) à auditeur senior aujourd'hui, en passant par la lutte contre la fraude, la facturation moyenne tension et le suivi des infrastructures d'énergies renouvelables.</p>
+        </div>
+        <div class="course-card">
+          <span class="course-code">02</span>
+          <h3>Certifications internationales</h3>
+          <p>Doubles certifications en dimensionnement d'installations électriques et solaires (CCL Maroc / Fusion Academy France, 2024), certification IHA en durabilité de l'hydroélectricité (2020), formations INES et IED (France).</p>
+        </div>
+        <div class="course-card">
+          <span class="course-code">03</span>
+          <h3>Publications scientifiques</h3>
+          <p>Articles publiés dans Global Scientific Journals et le Journal de physique de la SOAPHYS, et communications présentées au Congrès de la Société Ouest Africaine de Physique.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COACHING -->
+  <section class="pad" id="coaching">
+    <div class="wrap">
+      <div class="coach-grid">
+        <div class="reveal">
+          <span class="sec-tag">Coaching individuel</span>
+          <h2 style="font-size:clamp(26px,3vw,34px);font-weight:600;margin-bottom:20px;">Un accompagnement pensé pour votre carrière</h2>
+          <div class="coach-text">
+            <p>Au-delà des formations techniques, le Docteur Yattara propose un coaching individuel pour les professionnels de l'électricité souhaitant évoluer : préparation aux certifications, transition vers un poste d'encadrement, ou lancement d'une activité indépendante.</p>
+            <p>Chaque parcours de coaching est construit sur mesure, à partir d'un bilan initial et d'objectifs clairs et mesurables.</p>
+          </div>
+          <a href="https://whop.com/ic-yatt-traning" target="_blank" rel="noopener" class="cta-btn" style="display:inline-block;">Accéder au programme</a>
+        </div>
+        <div class="reveal">
+          <div class="coach-steps">
+            <div class="coach-step">
+              <span class="num">1</span>
+              <div><h4>Bilan initial gratuit</h4><p>Un échange de 30 minutes pour comprendre votre situation et vos objectifs.</p></div>
+            </div>
+            <div class="coach-step">
+              <span class="num">2</span>
+              <div><h4>Plan personnalisé</h4><p>Un parcours structuré, avec jalons et compétences ciblées.</p></div>
+            </div>
+            <div class="coach-step">
+              <span class="num">3</span>
+              <div><h4>Séances de coaching</h4><p>Sessions individuelles régulières, en ligne ou en présentiel.</p></div>
+            </div>
+            <div class="coach-step">
+              <span class="num">4</span>
+              <div><h4>Suivi &amp; ajustement</h4><p>Points d'étape réguliers pour ajuster le cap et mesurer les progrès.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="pad contact-sec" id="contact">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-tag">Contact</span>
+        <h2>Parlons de votre projet</h2>
+        <p>Une question sur une formation, un besoin de coaching sur mesure — écrivez-nous, nous répondons sous 48h.</p>
+      </div>
+      <div class="contact-grid">
+        <form class="reveal" onsubmit="event.preventDefault(); this.querySelector('.submit-btn').textContent='Message envoyé ✓';">
+          <div class="field">
+            <label for="name">Nom complet</label>
+            <input id="name" type="text" placeholder="Votre nom" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="vous@exemple.com" required>
+          </div>
+          <div class="field">
+            <label for="subject">Sujet</label>
+            <input id="subject" type="text" placeholder="Formation, coaching, autre...">
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Parlez-nous de votre besoin..." required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Envoyer le message</button>
+        </form>
+        <div class="reveal contact-info">
+          <div class="info-item">
+            <div class="k">Email</div>
+            <div class="v">icyattara@edmsa.ml</div>
+          </div>
+          <div class="info-item">
+            <div class="k">Téléphone</div>
+            <div class="v">+223 76 31 45 17 / 66 75 19 10</div>
+          </div>
+          <div class="info-item">
+            <div class="k">Localisation</div>
+            <div class="v">À distance</div>
+          </div>
+          <div class="info-item">
+            <div class="k">Disponibilité</div>
+            <div class="v">Lun–Ven, 9h–18h</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <a href="#top" class="logo"><span class="dot"></span>İC YAT TRAINING</a>
+    <span>© 2026 İC Yat Training. Tous droits réservés.</span>
+  </div>
+</footer>
+
+<script>
+  // Header scroll state
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Circuit spine: build nodes for each section, animate progress line
+  const sections = [
+    { id: 'top', label: 'Accueil' },
+    { id: 'apropos', label: 'À propos' },
+    { id: 'formations', label: 'Formations' },
+    { id: 'coaching', label: 'Coaching' },
+    { id: 'parcours', label: 'Parcours' },
+    { id: 'contact', label: 'Contact' },
+  ];
+  const spineNodes = document.getElementById('spineNodes');
+  const nodeEls = [];
+
+  function layoutNodes() {
+    nodeEls.forEach(n => n.el.remove());
+    nodeEls.length = 0;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    sections.forEach(s => {
+      const target = document.getElementById(s.id);
+      if (!target) return;
+      const top = target.offsetTop;
+      const pct = Math.min(100, Math.max(0, (top / docHeight) * 100));
+      const node = document.createElement('div');
+      node.className = 'spine-node';
+      node.style.top = pct + '%';
+      const label = document.createElement('div');
+      label.className = 'spine-label';
+      label.style.top = pct + '%';
+      label.textContent = s.label;
+      spineNodes.appendChild(node);
+      spineNodes.appendChild(label);
+      nodeEls.push({ el: node, top, section: s.id });
+    });
+  }
+
+  const progressLine = document.getElementById('spineProgress');
+  function updateSpine() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? scrollTop / docHeight : 0;
+    progressLine.style.strokeDashoffset = String(1 - pct);
+    nodeEls.forEach(n => {
+      n.el.classList.toggle('lit', scrollTop + window.innerHeight * 0.5 >= n.top);
+    });
+  }
+  window.addEventListener('scroll', updateSpine);
+  window.addEventListener('resize', () => { layoutNodes(); updateSpine(); });
+  layoutNodes();
+  updateSpine();
+
+  // Mobile menu toggle -> scroll to contact as simple fallback
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    document.getElementById('formations').scrollIntoView({ behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
